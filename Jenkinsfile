@@ -11,7 +11,7 @@ pipeline {
   }
   
   stages {
-      Stage("checkout") {
+      stage("checkout") {
           steps{
           checkout([$class: 'GitSCM', branches: [[name: '*/master']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/ArshdeepSingh070/bi-annual-devops.git']]])
         }

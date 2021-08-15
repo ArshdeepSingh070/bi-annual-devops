@@ -59,7 +59,7 @@ pipeline {
       }
       stage("Deployment to GKE"){
             steps {
-              bat "kubectl apply -f deplyment.yaml"
+              bat "kubectl apply -f deployment.yaml"
             }
       }
      }

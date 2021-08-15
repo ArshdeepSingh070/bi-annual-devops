@@ -6,7 +6,7 @@ metadata:
 spec: 
    replicas: 3
    selector:
-     matchlabels:
+     matchLabels:
        app: devops-exam-practice
        
    template:
@@ -15,7 +15,7 @@ spec:
          app: devops-exam-practice
             
      spec:
-       conatiners:
+       containers:
        - name: devops-pratice-container
          image: arshdeepsingh070/devops-final-exam:latest
          ports:

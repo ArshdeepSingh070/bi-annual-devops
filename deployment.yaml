@@ -32,6 +32,6 @@ spec:
      app: devops-practice-container
   ports:
   - protocol : TCP
-    nodeport: 30157  
+    nodePort: 30157  
     port: 8080
     targetPort: 8080            

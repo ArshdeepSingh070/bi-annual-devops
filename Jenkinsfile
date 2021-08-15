@@ -1,70 +1,60 @@
-pipeline { 
-    agent any
-        
-    tools {
-        maven 'Maven3'
-    }
-    environment {
-	    def mvn = tool 'Maven3';
-		def registry = 'arshdeepsingh070/devops-final-exam';
-	 
-    }
-    
-    options {
-        timestamps()
-        
-        timeout(time: 1, unit: 'HOURS' )
-        
-        buildDiscarder(logRotator(daysToKeepStr: '10', numToKeepStr: '20'))
-    }
-    
-    stages {
-        stage('Checkout') {
-            steps {
-		    echo "checkout"
-            }
+pipeline {
+
+  agent any
+  
+  tool {
+      maven 'Maven3'
+  }  
+  environment {
+      def mvn = tool 'Maven3';
+      def repo = 'arshdeepsingh070/devops-final-exam';
+  }
+  
+  stages {
+      Stage("checkout") {
+          steps{
+          checkout([$class: 'GitSCM', branches: [[name: '*/master']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/ArshdeepSingh070/bi-annual-devops.git']]])
         }
-        
-        stage('Build') {
-            steps {
-                bat 'mvn clean install'
-            }
-        }
-	stage('Unit Testing') {
-            steps {
-                bat 'mvn test'
-            }
-        }    
-        stage("SonarQube analysis") {
-            steps {
-              withSonarQubeEnv('SonarQubeScanner') {
-                bat "${mvn}/bin/mvn sonar:sonar"
-              }
-            }
+       }
+      
+      stage("build") {
+          steps {
+              bat "mvn clean install"
           }
-	 stage("create docker image"){
-             steps {
-	         bat "docker build -t i-practice-master --no-cache -f Dockerfile ."
-	     }
-	}
-	stage ("Push docker image to docker hub"){
-	      steps{
-		       bat "docker tag i-practice-master ${registry}:${BUILD_NUMBER}"
-		       withDockerRegistry([credentialsId: 'Test_Docker', url:""]){
-			  bat "docker push ${registry}:${BUILD_NUMBER}"
-		       }
-		   }
-	}
-	stage ("Docker Deployment"){
-	      steps {
-		      bat "docker run --name c-arshdeepsingh-master -d -p 7100:8080 ${registry}:${BUILD_NUMBER}"
-	       }
-		
-	}
-	stage ("The end"){
-	      steps{
-		    echo "The process end"
-	       }
-	}    
-    }
+      }
+      
+      stage("Unit Test"){
+          steps {
+              bat "mvn test"
+          }
+      }
+      
+      stage("Sonar Analysis") {
+          steps {
+              withSonarQubeEnv("SonarQubeScanner") {
+                  bat "mvn clean package sonar:sonar"
+              }
+          }
+      }
+      
+      stage("Create docker image") {
+          steps {
+              bat "docker build -t i-practice-master:{BUILD_NUMBER} --no-cache -f Dockerfile ."
+          }
+      }
+      stage("Push To Docker Hub") {
+          steps {
+              bat "docker tag i-practice-master:{BUILD_NUMBER} ${repo}:${BUILD_NUMBER}"
+              withDockerRegistry([credentialsId: 'Test_Docker', url:""]){
+                  bat "docker push ${repo}:{BUILD_NUMBER}"
+              }
+          }
+      }
+      stage("Docker Deployment") {
+          steps {
+              bat "docker run --name c-practice-master -d -p 7100:8080 ${repo}:${BUILD_NUMBER}"
+          }
+      }
+  }
+
 }

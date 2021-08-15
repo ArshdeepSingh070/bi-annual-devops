@@ -45,16 +45,23 @@ pipeline {
       stage("Push To Docker Hub") {
           steps {
               bat "docker tag i-practice-master:${BUILD_NUMBER} ${repo}:${BUILD_NUMBER}"
+              bar "docker tag i-practice-master:${BUILD_NUMBER} ${repo}:latest"
               withDockerRegistry([credentialsId: 'Test_Docker', url:""]){
                   bat "docker push ${repo}:${BUILD_NUMBER}"
+                  bat "docker push ${repo}:latest"
               }
           }
       }
       stage("Docker Deployment") {
           steps {
-              bat "docker run --name c-practice-master -d -p 7100:8080 ${repo}:${BUILD_NUMBER}"
+              bat "docker run --name c-practice-master -d -p 7100:8080 ${repo}:latest"
           }
       }
-  }
+      stage("Deployment to GKE"){
+            steps {
+              bat "kubectl apply -f deplyment.yaml"
+            }
+      }
+     }
 
 }

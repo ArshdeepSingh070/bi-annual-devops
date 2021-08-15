@@ -39,14 +39,14 @@ pipeline {
       
       stage("Create docker image") {
           steps {
-              bat "docker build -t i-practice-master:{BUILD_NUMBER} --no-cache -f Dockerfile ."
+              bat "docker build -t i-practice-master:${BUILD_NUMBER} --no-cache -f Dockerfile ."
           }
       }
       stage("Push To Docker Hub") {
           steps {
-              bat "docker tag i-practice-master:{BUILD_NUMBER} ${repo}:${BUILD_NUMBER}"
+              bat "docker tag i-practice-master:${BUILD_NUMBER} ${repo}:${BUILD_NUMBER}"
               withDockerRegistry([credentialsId: 'Test_Docker', url:""]){
-                  bat "docker push ${repo}:{BUILD_NUMBER}"
+                  bat "docker push ${repo}:${BUILD_NUMBER}"
               }
           }
       }

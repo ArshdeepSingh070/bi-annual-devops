@@ -1,5 +1,4 @@
 apiVersion: apps/v1
-
 kind: Deployment
 metadata:
    name: devops-exam-practice
@@ -22,8 +21,9 @@ spec:
          - containerPort: 8080
 
 ---
+
+apiVersion: v1
 kind: service
-appVersion: v1
 metadata:
    name: devops-exam-practice
 spec:

@@ -7,7 +7,7 @@ pipeline {
     
     environment {
         def mvn = tool 'Maven3';
-        def repository = "arshdeepsingh070/devops-final-exam";
+        def repository = 'arshdeepsingh070/devops-final-exam';
     }
 
     stages {

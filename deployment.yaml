@@ -1,0 +1,35 @@
+apiVersion: app/v1
+kind: Deployment
+metadata:
+   name: devops-final-exam-deployment
+spec:
+   selector:
+    matchLables:
+      app: devops-final-exam
+    template:
+     replicas: 3
+     metadata:
+       labels:
+         app:devops-final-exam
+    spec:
+      container:
+      -name : devops-final-exam-container
+       image: arshdeepsingh070/devops-final-exam:latest   
+       ports:
+        - containerPort : 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+   name: devops-final-exam-Service
+spec:
+  selector: 
+    app: devops-final-exam
+    
+    type: NodePort
+    ports:
+    - port: 8080
+      nodePort: 30140
+      targetPort: 8080  
+          
+     

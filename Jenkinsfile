@@ -41,8 +41,8 @@ pipeline {
                 }
                 stage('push to docker hub') {
                     steps {
-                        bat 'docker -t i-arshdeepsingh070:feature ${repository}:${BUILD_NUMBER}'
-                        bat 'docker -t i-arshdeepsingh070:feature ${repository}:latest'
+                        bat 'docker tag i-arshdeepsingh070:feature ${repository}:${BUILD_NUMBER}'
+                        bat 'docker tag i-arshdeepsingh070:feature ${repository}:latest'
                         withDockerRegistry([credentialsId: 'Test_Docker', url:""]){
                             bat 'docker push ${repository}:${BUILD_NUMBER}'
                             bat 'docker push ${repository}:latest'

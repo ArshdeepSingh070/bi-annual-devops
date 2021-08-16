@@ -24,7 +24,7 @@ metadata:
    name: devops-final-exam-Service
 spec:
   selector: 
-    app: devops-final-exam-deployment
+    app: devops-final-exam-container
     
     ports:
     - port: 8080

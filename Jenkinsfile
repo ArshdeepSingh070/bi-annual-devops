@@ -29,7 +29,7 @@ pipeline {
         
         stage('create docker image') {
             steps {
-                bat 'docker build -t i-arshdeepsingh070:feature --no-cache -f Dockerfile .'
+                bat 'docker build -t i-devops-feature:${BUILD_NUMBER} --no-cache -f Dockerfile .'
             }
         }
         stage('check and push') {
@@ -41,8 +41,8 @@ pipeline {
                 }
                 stage('push to docker hub') {
                     steps {
-                        bat 'docker tag i-arshdeepsingh070:feature ${repository}:${BUILD_NUMBER}'
-                        bat 'docker tag i-arshdeepsingh070:feature ${repository}:latest'
+                        bat 'docker tag i-devops-feature:${BUILD_NUMBER} ${repository}:${BUILD_NUMBER}'
+                        bat 'docker tag i-devops-feature:${BUILD_NUMBER} ${repository}:latest'
                         withDockerRegistry([credentialsId: 'Test_Docker', url:""]){
                             bat 'docker push ${repository}:${BUILD_NUMBER}'
                             bat 'docker push ${repository}:latest'

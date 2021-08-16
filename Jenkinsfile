@@ -57,11 +57,6 @@ pipeline {
             bat "docker run --name c-arshdeepsingh-feature -d -p 7400:8080 ${repository}:latest"
             }
         }
-        stage('GKE deployment') {
-            steps{
-            bat "kubectl apply -f deployment.yaml"
-            }
-        }
         
     }
 }

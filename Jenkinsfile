@@ -1,7 +1,7 @@
 pipeline {
     agent any
     
-    tool {
+    tools {
         maven 'Maven3'
     }
     
@@ -49,7 +49,7 @@ pipeline {
                     steps {
                         bat 'docker -t i-arshdeepsingh070:feature ${repository}:${BUILD_NUMBER}'
                         bat 'docker -t i-arshdeepsingh070:feature ${repository}:latest'
-                        withDockerRegistry[credentials_ID = 'Test_Docker' , url]{
+                        withDockerRegistry([credentialsId = 'Test_Docker' , url:""]){
                             bat 'docker push ${repository}:${BUILD_NUMBER}'
                             bat 'docker push ${repository}:latest'
                         }
@@ -59,7 +59,9 @@ pipeline {
             }
         }   
         stage('docker deployment') {
+            steps{
             bat 'docker run --name c-arshdeepsingh:latest -d -p 7400:8080 ${repository}:latest'
+            }
         }
         
     }

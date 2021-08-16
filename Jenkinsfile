@@ -36,7 +36,7 @@ pipeline {
             parallel {
                 stage ('container check'){
                     steps {
-                        bat "docker rm -f c-arshdeepsingh:latest || exit"
+                        bat "docker rm -f c-arshdeepsingh-feature || exit"
                     } 
                 }
                 stage('push to docker hub') {
@@ -55,6 +55,11 @@ pipeline {
         stage('docker deployment') {
             steps{
             bat "docker run --name c-arshdeepsingh-feature -d -p 7400:8080 ${repository}:latest"
+            }
+        }
+        stage('GKE deployment') {
+            steps{
+            bat "kubectl apply -f deployment.yaml"
             }
         }
         
